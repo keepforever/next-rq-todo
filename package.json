@@ -1,0 +1,31 @@
+{
+  "name": "keepforever.dev",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@headlessui/react": "^0.2.0",
+    "@reach/dialog": "^0.12.1",
+    "@reach/visually-hidden": "^0.12.0",
+    "@tailwindcss/forms": "^0.2.1",
+    "autoprefixer": "^10.1.0",
+    "axios": "^0.21.1",
+    "classnames": "^2.2.6",
+    "next": "10.0.4",
+    "nodemailer": "^6.4.17",
+    "postcss": "^8.2.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-query": "^3.9.8",
+    "tailwindcss": "^2.0.2"
+  },
+  "devDependencies": {
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-import": "^14.0.0",
+    "postcss-preset-env": "^6.7.0"
+  }
+}
