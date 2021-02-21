@@ -212,40 +212,39 @@ const UpdateTodo = () => {
                                 <div className="col-span-8">{state.notes}</div>
                             </div>
 
-                            {
-                                <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4 text-sm sm:text-base pr-2 sm:pr-0">
-                                    <div className="col-span-5">
-                                        <button
-                                            id="delete"
-                                            button-case="delete"
-                                            onClick={handleAction}
-                                            className="rounded-full py-1 sm:py-2 md:py-3 px-6 text-red-600 bg-white"
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                    <div className="col-span-4">
-                                        <button
-                                            id="cancel"
-                                            button-case="cancel"
-                                            onClick={handleAction}
-                                            className="rounded-full py-1 sm:py-2 md:py-3 text-blue-400 bg-white"
-                                        >
-                                            Back to list
-                                        </button>
-                                    </div>
-                                    <div className="col-span-3 items-center">
-                                        <button
-                                            id="save"
-                                            button-case="edit"
-                                            onClick={handleAction}
-                                            className="rounded-full py-1 sm:py-2 md:py-3 px-10 text-white bg-blue-400"
-                                        >
-                                            Edit
-                                        </button>
-                                    </div>
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4 text-sm sm:text-base pr-2 sm:pr-0">
+                                <div className="col-span-4">
+                                    <button
+                                        id="delete"
+                                        button-case="delete"
+                                        onClick={handleAction}
+                                        className="rounded-full py-1 sm:py-2 md:py-3 px-6 text-red-600 bg-white"
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
-                            }
+                                <div className="col-span-4">
+                                    <button
+                                        id="cancel"
+                                        button-case="cancel"
+                                        onClick={handleAction}
+                                        className="rounded-full py-1 sm:py-2 md:py-3 text-blue-400 bg-white"
+                                    >
+                                        Back to list
+                                    </button>
+                                </div>
+                                <div className="col-span-4 items-center">
+                                    <button
+                                        id="save"
+                                        button-case="edit"
+                                        onClick={handleAction}
+                                        className="rounded-full py-1 sm:py-2 md:py-3 px-10 text-white bg-blue-400"
+                                    >
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+
                             <div className="flex justify-center items-center mt-6"></div>
                         </>
                     )}
