@@ -20,11 +20,14 @@
     "nodemailer": "^6.4.17",
     "postcss": "^8.2.2",
     "react": "17.0.1",
+    "react-datepicker": "^3.5.0",
     "react-dom": "17.0.1",
     "react-query": "^3.9.8",
     "tailwindcss": "^2.0.2"
   },
   "devDependencies": {
+    "eslint": "^7.20.0",
+    "eslint-plugin-react": "^7.22.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^14.0.0",
     "postcss-preset-env": "^6.7.0"

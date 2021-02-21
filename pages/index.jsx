@@ -1,7 +1,10 @@
+/* eslint-disable react/prop-types */
+import React from 'react';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
 import { format, compareAsc } from 'date-fns';
+import Link from 'next/link';
 
 import Layout from '../comps/Layout';
 
@@ -64,7 +67,7 @@ const TodoItem = (props) => {
     );
 };
 
-const index = (props) => {
+const index = () => {
     const todosQuery = useQuery('todos', getTodos, { refetchOnWindowFocus: false });
     console.log('\n', '\n', `todosQuery = `, todosQuery, '\n', '\n');
 
@@ -74,15 +77,19 @@ const index = (props) => {
                 <div className="container">
                     <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">To Dos</div>
 
-                    <div className="flex items-center">
-                        <img
-                            className="h-5 md:h-5 mr-3"
-                            layout="intrinsic"
-                            src="/plus-square.png"
-                            alt="Task Manager logo"
-                        />
-                        <span className="text-black">Create</span>
-                    </div>
+                    <Link href="/create-todo">
+                        <a className="table">
+                            <div className="flex items-center">
+                                <img
+                                    className="h-5 md:h-5 mr-3"
+                                    layout="intrinsic"
+                                    src="/plus-square.png"
+                                    alt="Task Manager logo"
+                                />
+                                <span className="text-black">Create</span>
+                            </div>
+                        </a>
+                    </Link>
                     <div className="flex justify-center items-center content-center w-full mt-3">
                         <div className="flex-col justify-center items-center content-center w-full shadow-lg px-4">
                             {todosQuery?.data?.data.map((td, index) => {

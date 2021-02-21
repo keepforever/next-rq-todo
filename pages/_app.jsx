@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/globals.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 
