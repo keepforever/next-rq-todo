@@ -17,10 +17,10 @@ export const actions = {
 const messageCharLimit = 500;
 
 const initialState = {
-    title: String(new Date().getTime()) + '---Brian',
-    description: String(new Date().getTime()),
+    title: '',
+    description: '',
     dueDate: String(new Date().toISOString()),
-    notes: String(new Date().getTime()),
+    notes: '',
     error: '',
     isShowConfirmSend: false,
     messageCharsRemaining: messageCharLimit,
@@ -98,14 +98,14 @@ const CreateTodo = () => {
     };
     return (
         <Layout>
-            <div className="flex items-center justify-center p-5 text-black">
+            <div className="flex items-center justify-center text-black">
                 <div className="container">
-                    <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">
-                        To Dos
+                    <div className="flex justify-start items-center mb-4 text-xl font-bold text-black pl-4 sm:pl-0">
+                        Create To Do
                         {isCreateTodoLoading && <span className="spin-circle-small" />}
                     </div>
                     <form>
-                        <div className="w-6/12">
+                        <div className="w-11/12 sm:w-7/12">
                             {/* Name */}
                             <div className="mt-4">
                                 <label htmlFor="title" className="block text-sm ">
@@ -138,7 +138,7 @@ const CreateTodo = () => {
                                         placeholder="Description"
                                         value={state.description}
                                         onChange={handleOnChange}
-                                        rows={4}
+                                        rows={3}
                                         className="w-full rounded-md border-gray-400"
                                     />
                                 </div>
@@ -173,7 +173,7 @@ const CreateTodo = () => {
                                         placeholder="Notes"
                                         value={state.notes}
                                         onChange={handleOnChange}
-                                        rows={4}
+                                        rows={3}
                                         className="w-full rounded-md border-gray-400"
                                     />
                                 </div>
