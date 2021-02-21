@@ -1,3 +1,4 @@
+import React from 'react';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 
@@ -9,7 +10,7 @@ const getProfile = async () => {
     return localGetProfileResp;
 };
 
-const Navbar = (props) => {
+const Navbar = () => {
     const profileQuery = useQuery('posts', getProfile, { refetchOnWindowFocus: false });
     const userName = `Welcome, ${profileQuery?.data?.data?.name}` || '';
     return (

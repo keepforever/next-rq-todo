@@ -44,6 +44,7 @@ const TodoItem = (props) => {
             {/* Title, Description */}
 
             <div className="col-span-8 pl-4">
+                <span className="font-bold mr-2">{props.id}</span>
                 <span className="font-bold mr-4">{props.title}</span>
                 <span className="text-xs hidden sm:inline-block">{props.description}</span>
             </div>
@@ -69,7 +70,7 @@ const TodoItem = (props) => {
 
 const index = () => {
     const todosQuery = useQuery('todos', getTodos, { refetchOnWindowFocus: false });
-    console.log('\n', '\n', `todosQuery = `, todosQuery, '\n', '\n');
+    // console.log('\n', '\n', `todosQuery = `, todosQuery, '\n', '\n');
 
     return (
         <Layout>
