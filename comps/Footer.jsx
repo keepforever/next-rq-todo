@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Footer = (props) => {
-    return <footer className="py-5 bg-gray-700 text-center text-white">privacy policy</footer>;
+const Footer = () => {
+    return <footer className="py-3 bg-gray-700 text-right text-white text-xs px-3">privacy policy</footer>;
 };
 
 export default Footer;

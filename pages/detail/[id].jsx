@@ -142,6 +142,7 @@ const UpdateTodo = () => {
                         notes: state.notes
                     };
                     await updateTodo(updateTodoPayload);
+                    setMode('detail');
                 } catch (error) {}
                 break;
             case 'confirm-delete':
@@ -160,7 +161,7 @@ const UpdateTodo = () => {
 
     return (
         <Layout>
-            <div className="flex items-center justify-center p-5 text-black">
+            <div className="flex items-center justify-center text-black">
                 <div className="container">
                     {/* Read Only Mode */}
 
@@ -169,14 +170,14 @@ const UpdateTodo = () => {
                             <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">
                                 To Do Details
                             </div>
-                            <div className="mt-4 w-4/12 mb-4">
+                            <div className="mt-4 mb-4">
                                 <select
                                     id="taskStatus"
                                     name="taskStatus"
                                     value={state.taskStatus}
                                     onChange={handleOnChange}
                                     disabled={true}
-                                    className={cn('rounded-full py-1 px-2 text-xs w-4/12', {
+                                    className={cn('rounded-full py-1 px-2 text-xs w-6/12 sm:w-4/12 md:w-2/12 ', {
                                         'border-blue-400 text-blue-400': state.taskStatus === 'InProgress',
                                         'border-gray-400 text-gray-400': state.taskStatus === 'ToDo',
                                         'bg-green-500 text-white': state.taskStatus === 'Done'
@@ -188,31 +189,31 @@ const UpdateTodo = () => {
                                 </select>
                             </div>
 
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
                                 <div className="col-span-4">
                                     <p className="font-bold">Title</p>
                                 </div>
                                 <div className="col-span-8">{state.title}</div>
                             </div>
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
                                 <div className="col-span-4">
                                     <p className="font-bold">Description</p>
                                 </div>
                                 <div className="col-span-8">{state.description}</div>
                             </div>
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
                                 <div className="col-span-4">Due Date</div>
                                 <div className="col-span-8">
                                     {state.dueDate && format(new Date(state.dueDate), 'MM/dd/yy')}
                                 </div>
                             </div>
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
                                 <div className="col-span-4">Notes</div>
                                 <div className="col-span-8">{state.notes}</div>
                             </div>
 
                             {
-                                <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6 text-sm sm:text-base pr-2 sm:pr-0">
+                                <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4 text-sm sm:text-base pr-2 sm:pr-0">
                                     <div className="col-span-5">
                                         <button
                                             id="delete"
@@ -261,7 +262,7 @@ const UpdateTodo = () => {
                                     value={state.taskStatus}
                                     onChange={handleOnChange}
                                     disabled={true}
-                                    className={cn('rounded-full py-1 px-2 text-xs w-4/12', {
+                                    className={cn('rounded-full py-1 px-2 text-xs w-6/12 sm:w-4/12 md:w-2/12 ', {
                                         'border-blue-400 text-blue-400': state.taskStatus === 'InProgress',
                                         'border-gray-400 text-gray-400': state.taskStatus === 'ToDo',
                                         'bg-green-500 text-white': state.taskStatus === 'Done'
@@ -273,25 +274,25 @@ const UpdateTodo = () => {
                                 </select>
                             </div>
 
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
                                 <div className="col-span-4">
                                     <p className="font-bold">Title</p>
                                 </div>
                                 <div className="col-span-8">{state.title}</div>
                             </div>
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
                                 <div className="col-span-4">
                                     <p className="font-bold">Description</p>
                                 </div>
                                 <div className="col-span-8">{state.description}</div>
                             </div>
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
                                 <div className="col-span-4">Due Date</div>
                                 <div className="col-span-8">
                                     {state.dueDate && format(new Date(state.dueDate), 'MM/dd/yy')}
                                 </div>
                             </div>
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
                                 <div className="col-span-4">Notes</div>
                                 <div className="col-span-8">{state.notes}</div>
                             </div>
@@ -312,8 +313,8 @@ const UpdateTodo = () => {
                                     className="rounded-full py-1 sm:py-2 md:py-3 px-10 text-white bg-red-500"
                                 >
                                     Delete
-                                    {isDeleteLoading && <span className="spin-circle-small" />}
                                 </button>
+                                {isDeleteLoading && <span className="spin-circle-small" />}
                             </div>
                         </>
                     )}
@@ -325,13 +326,13 @@ const UpdateTodo = () => {
                                 <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">
                                     Edit To Do
                                 </div>
-                                <div className="mt-4">
+                                <div className="mt-2">
                                     <select
                                         id="taskStatus"
                                         name="taskStatus"
                                         value={state.taskStatus}
                                         onChange={handleOnChange}
-                                        className={cn('rounded-full py-1 px-2 text-xs w-4/12', {
+                                        className={cn('rounded-full py-1 px-2 text-xs w-6/12 sm:w-4/12 md:w-2/12 ', {
                                             'border-blue-400 text-blue-400': state.taskStatus === 'InProgress',
                                             'border-gray-400 text-gray-400': state.taskStatus === 'ToDo',
                                             'bg-green-500 text-white': state.taskStatus === 'Done'
@@ -344,11 +345,11 @@ const UpdateTodo = () => {
                                 </div>
 
                                 {/* Name */}
-                                <div className="mt-4">
+                                <div className="mt-2">
                                     <label htmlFor="title" className="block text-sm ">
                                         Title
                                     </label>
-                                    <div className="mt-1">
+                                    <div>
                                         <input
                                             type="text"
                                             name="title"
@@ -363,19 +364,19 @@ const UpdateTodo = () => {
 
                                 {/* Email */}
 
-                                <div className="mt-4">
+                                <div className="mt-2">
                                     <label htmlFor="description" className="block text-sm ">
                                         Description
                                     </label>
 
-                                    <div className="mt-1">
+                                    <div>
                                         <textarea
                                             id="description"
                                             name="description"
                                             value={state.description}
                                             placeholder="Description"
                                             onChange={handleOnChange}
-                                            rows={4}
+                                            rows={3}
                                             className="w-full rounded-md border-gray-400"
                                         />
                                     </div>
@@ -383,7 +384,7 @@ const UpdateTodo = () => {
 
                                 {/* Phone */}
 
-                                <div className="mt-4">
+                                <div className="mt-2">
                                     <div className="flex">
                                         <label htmlFor="due date" className="block text-sm ">
                                             Due Date
@@ -398,7 +399,7 @@ const UpdateTodo = () => {
                                     />
                                 </div>
 
-                                <div className="mt-4">
+                                <div className="mt-2">
                                     <label htmlFor="notes" className="block text-sm ">
                                         Notes
                                     </label>
@@ -410,12 +411,12 @@ const UpdateTodo = () => {
                                             placeholder="Notes"
                                             value={state.notes}
                                             onChange={handleOnChange}
-                                            rows={4}
+                                            rows={3}
                                             className="w-full rounded-md border-gray-400"
                                         />
                                     </div>
                                 </div>
-                                <div className="flex justify-end items-center mt-8">
+                                <div className="flex justify-end items-center mt-2">
                                     <button
                                         id="edit"
                                         button-case="edit"
@@ -431,8 +432,8 @@ const UpdateTodo = () => {
                                         className="rounded-full py-1 sm:py-2 md:py-3 px-10 text-white bg-blue-400"
                                     >
                                         Save
-                                        {isUpdateLoading && <span className="spin-circle-small" />}
                                     </button>
+                                    {isUpdateLoading && <span className="spin-circle-small" />}
                                 </div>
                             </div>
                         </form>
