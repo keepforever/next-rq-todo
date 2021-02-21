@@ -14,7 +14,7 @@ export default function Home({ children }) {
             <div className="flex flex-col h-screen justify-between">
                 <Navbar />
                 {/* flex items-center justify-center */}
-                <main className="h-full bg-gray-400 overflow-y-scroll">{children}</main>
+                <main className="h-full  overflow-y-scroll">{children}</main>
                 <Footer />
             </div>
         </>

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 
 const getProfile = async () => {
     let localGetProfileResp = null;
@@ -13,12 +14,19 @@ const getProfile = async () => {
 const Navbar = () => {
     const profileQuery = useQuery('posts', getProfile, { refetchOnWindowFocus: false });
     const userName = `Welcome, ${profileQuery?.data?.data?.name}` || '';
+    const router = useRouter();
+    const navigateHome = (e) => {
+        e.preventDefault();
+        router.push('/');
+    };
+
     return (
         <header className="flex items-center justify-center p-5 bg-green-500 text-white">
             <div className="container">
                 <div className="flex justify-between items-center content-center w-full">
                     <img
-                        className="h-8 md:h-10"
+                        onClick={navigateHome}
+                        className="h-8 md:h-10 cursor-pointer"
                         layout="intrinsic"
                         src="/task-manager-logo.png"
                         alt="Task Manager logo"

@@ -22,16 +22,13 @@ const TodoItem = (props) => {
 
     return (
         <div
-            onClick={() => {
-                router.push(`/edit/${props.id}`);
-            }}
             className={cn('grid grid-cols-12 p-2 cursor-pointer hover:bg-green-200', {
-                'border-red-400 border-b-2': props.isLastTodo
+                'border-gray-200 border-b-2': props.isLastTodo
             })}
         >
             {/* Action Button */}
 
-            <div className="col-span-2 border-r-2 border-red-400 flex justify-center px-2 ">
+            <div className="col-span-2 border-r-2 border-gray-200 flex justify-center px-2 ">
                 <select
                     className={cn('rounded-full py-1 px-2 text-xs w-10/12', {
                         'border-blue-400 text-blue-400': props.taskStatus === 'InProgress',
@@ -49,7 +46,12 @@ const TodoItem = (props) => {
 
             {/* Title, Description */}
 
-            <div className="col-span-8 pl-4">
+            <div
+                className="col-span-8 pl-4"
+                onClick={() => {
+                    router.push(`/edit/${props.id}`);
+                }}
+            >
                 <span className="font-bold mr-2">{props.id}</span>
                 <span className="font-bold mr-4">{props.title}</span>
                 <span className="text-xs hidden sm:inline-block">{props.description}</span>
@@ -57,9 +59,14 @@ const TodoItem = (props) => {
 
             {/* Status Indicator */}
 
-            <div className="col-span-2 flex justify-around items-center">
+            <div
+                className="col-span-2 flex justify-center items-center"
+                onClick={() => {
+                    router.push(`/edit/${props.id}`);
+                }}
+            >
                 <span
-                    className={cn('h-3 w-3 rounded-md', {
+                    className={cn('h-3 w-3 rounded-md mr-4', {
                         'bg-red-500': new Date(props.dueDate).getTime() - new Date().getTime() < 0,
                         'bg-yellow-500':
                             new Date(props.dueDate).getTime() - new Date().getTime() < 60 * 60 * 24 * 1000 * 2 &&
@@ -68,7 +75,8 @@ const TodoItem = (props) => {
                             new Date(props.dueDate).getTime() - new Date().getTime() > 60 * 60 * 24 * 1000 * 2
                     })}
                 />
-                <span className="text-xs">Due {format(new Date(props.dueDate), 'MM/dd/yy')}</span>
+                <span className="text-xs mr-4">Due</span>
+                <span className="text-xs">{format(new Date(props.dueDate), 'MM/dd/yy')}</span>
             </div>
         </div>
     );
@@ -80,7 +88,7 @@ const index = () => {
 
     return (
         <Layout>
-            <div className="flex items-center justify-center p-5 text-white">
+            <div className="flex items-center justify-center p-5 text-black">
                 <div className="container">
                     <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">To Dos</div>
 
@@ -117,25 +125,3 @@ const index = () => {
 };
 
 export default index;
-
-// console.log('\n', '\n', `props = `, props, '\n', '\n');
-// console.log(
-//     '\n',
-//     '\n',
-//     `new Date(props.dueDate).getTime() - new Date().getTime() = `,
-//     new Date(props.dueDate).getTime() - new Date().getTime(),
-//     '\n',
-//     '\n'
-// );
-// console.log('\n', '\n', `new Date(props.dueDate).getTime() = `, new Date(props.dueDate).getTime(), '\n', '\n');
-// console.log('\n', '\n', `new Date().getTime() = `, new Date().getTime(), '\n', '\n');
-// console.log(
-//     '\n',
-//     '\n',
-//     `new Date(props.dueDate).getTime() - new Date().getTime() < 60 * 60 * 24 * 1000 * 2 &&
-// new Date(props.dueDate).getTime() - new Date().getTime() > 0 = `,
-//     new Date(props.dueDate).getTime() - new Date().getTime() < 60 * 60 * 24 * 1000 * 2 &&
-//         new Date(props.dueDate).getTime() - new Date().getTime() > 0,
-//     '\n',
-//     '\n'
-// );
