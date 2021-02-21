@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -44,45 +45,13 @@ const reducer = (state = {}, action = null) => {
             return state;
     }
 };
-/* from client */
-// const handleCreateTodo = async (data) => {
-//     let createTodoResp = null;
-
-//     try {
-//         // createTodoResp = await axios.post('/api/todos', data);
-//         console.log('\n', `kill me please `, '\n');
-//         createTodoResp = await axios({
-//             method: 'POST',
-//             url: `https://awh-task-manager-api-app.azurewebsites.net/api/User/218c2089-8bbe-4f3e-8bf0-ad1a5526af5f/ToDos`,
-//             headers: {
-//                 accept: 'text/plain',
-//                 'Content-Type': 'application/json'
-//             },
-//             data: {
-//                 ...data,
-//                 userId: '218c2089-8bbe-4f3e-8bf0-ad1a5526af5f',
-//                 taskStatus: 'ToDo'
-//             }
-//         });
-
-//         // Content-Type': 'application/json'
-//         console.log('\n', '\n', `createTodoResp = `, createTodoResp, '\n', '\n');
-//     } catch (error) {
-//         // console.log('\n', '\n', `local create error = `, error, '\n', '\n');
-//     }
-//     return createTodoResp;
-// };
 
 const handleCreateTodo = async (data) => {
     let createTodoResp = null;
 
     try {
-        console.log('\n', `kill me please `, '\n');
         createTodoResp = await axios.post('/api/todos', data);
-        console.log('\n', '\n', `createTodoResp = `, createTodoResp, '\n', '\n');
-    } catch (error) {
-        // console.log('\n', '\n', `local create error = `, error, '\n', '\n');
-    }
+    } catch (error) {}
     return createTodoResp;
 };
 
@@ -91,7 +60,7 @@ const CreateTodo = () => {
     const [startDate, setStartDate] = React.useState(new Date());
     const router = useRouter();
 
-    const { mutateAsync: createTodo, ...createTodoProps } = useMutation(handleCreateTodo, {
+    const { mutateAsync: createTodo, isLoading: isCreateTodoLoading } = useMutation(handleCreateTodo, {
         refetchOnWindowFocus: false
     });
 
@@ -112,19 +81,15 @@ const CreateTodo = () => {
         const action = e.target.getAttribute('button-case');
 
         if (action === 'create') {
-            let createTodoResp = null;
             try {
-                createTodoResp = await createTodo({
+                await createTodo({
                     title: state.title,
                     description: state.description,
                     dueDate: startDate.toISOString(),
                     notes: state.notes
                 });
-                console.log('\n', '\n', `secondary createTodoResp = `, createTodoResp, '\n', '\n');
-                // router.push('/');
-            } catch (error) {
-                // console.log('\n', '\n', `createTodo error = `, error, '\n', '\n');
-            }
+                router.push('/');
+            } catch (error) {}
         }
 
         if (action === 'cancel') {
@@ -135,6 +100,10 @@ const CreateTodo = () => {
         <Layout>
             <div className="flex items-center justify-center p-5 text-black">
                 <div className="container">
+                    <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">
+                        To Dos
+                        {isCreateTodoLoading && <span className="spin-circle-small" />}
+                    </div>
                     <form>
                         <div className="w-6/12">
                             {/* Name */}

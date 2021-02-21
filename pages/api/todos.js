@@ -1,13 +1,7 @@
+/* eslint-disable no-empty */
 const axios = require('axios');
 
 const getTodos = async (req, res) => {
-    // console.log('\n', `hello get todos `, '\n');
-    console.log('\n', '\n', `zebra = `, '\n', '\n');
-    // console.log('\n', '\n', `Object.keys(req) = `, Object.keys(req), '\n', '\n');
-    // console.log('\n', '\n', `req.method = `, req.method, '\n', '\n');
-    // console.log('\n', '\n', `req?.body = `, req?.body, '\n', '\n');
-    console.log('\n', '\n', `process?.env?.BRIAN_KEY = `, process?.env?.BRIAN_KEY, '\n', '\n');
-
     const switcher = req.method;
 
     switch (switcher) {
@@ -31,18 +25,16 @@ const getTodos = async (req, res) => {
                         taskStatus: 'ToDo'
                     }
                 );
-                console.log('\n', '\n', `postTodoResp = `, postTodoResp.config.data, '\n', '\n');
+
                 return res.status(201).json(postTodoResp?.config?.data);
             } catch (error) {
-                console.log('\n', `hello api/todo error ${String(new Date().getTime())}`, '\n');
-                console.log('\n', '\n', `error.response = `, error.response, '\n', '\n');
                 return res.status(500).json(error);
             }
             // code block
         }
         case 'PUT': {
             let updateTodoResp = null;
-            console.log('\n', '\n', `req.body = `, req.body, '\n', '\n');
+
             try {
                 updateTodoResp = await axios.put(
                     `https://awh-task-manager-api-app.azurewebsites.net/api/User/${process?.env?.BRIAN_KEY}/ToDos/${req.body.id}`,
@@ -51,11 +43,21 @@ const getTodos = async (req, res) => {
                         userId: process?.env?.BRIAN_KEY
                     }
                 );
-                console.log('\n', '\n', `updateTodoResp = `, updateTodoResp.config.data, '\n', '\n');
+
                 return res.status(201).json(updateTodoResp?.config?.data);
             } catch (error) {
-                console.log('\n', `hello api/todo error ${String(new Date().getTime())}`, '\n');
-                console.log('\n', '\n', `error.response = `, error.response, '\n', '\n');
+                return res.status(500).json(error);
+            }
+            // code block
+        }
+        case 'DELETE': {
+            try {
+                await axios.delete(
+                    `https://awh-task-manager-api-app.azurewebsites.net/api/User/${process?.env?.BRIAN_KEY}/ToDos/${req.body.id}`
+                );
+
+                return res.status(201).json({ message: 'delete success' });
+            } catch (error) {
                 return res.status(500).json(error);
             }
             // code block

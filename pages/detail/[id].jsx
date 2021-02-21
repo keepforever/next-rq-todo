@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from 'react-query';
 import cn from 'classnames';
-import { format, compareAsc } from 'date-fns';
+import { format } from 'date-fns';
 
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
@@ -56,30 +56,34 @@ const getTodos = async () => {
     return getTodosResp;
 };
 const handleUpdateTodo = async (data) => {
-    let createTodoResp = null;
+    let updateTodoResp = null;
     try {
-        createTodoResp = await axios.put('/api/todos', data);
-        // console.log('\n', '\n', `createTodoResp = `, createTodoResp, '\n', '\n');
+        updateTodoResp = await axios.put('/api/todos', data);
     } catch (error) {}
-    return createTodoResp;
+    return updateTodoResp;
+};
+const handleDeleteTodo = async (data) => {
+    let deleteTodoResp = null;
+    try {
+        deleteTodoResp = await axios.delete('/api/todos', { data });
+    } catch (error) {}
+    return deleteTodoResp;
 };
 
 const UpdateTodo = () => {
     const [state, dispatch] = React.useReducer(reducer, initialState);
-    const [startDate, setStartDate] = React.useState('');
     const [mode, setMode] = React.useState('detail');
     const router = useRouter();
     const { id: todoId } = router.query;
 
-    const todosQuery = useQuery('todos', getTodos, {
+    useQuery('todos', getTodos, {
         onSuccess: (resp) => {
-            console.log('\n', '\n', `resp = `, resp, '\n', '\n');
             const targetTodo = resp.data.find((d) => String(d.id) === todoId);
-            console.log('\n', '\n', `targetTodo = `, targetTodo, '\n', '\n');
+
             dispatch({
                 type: actions.SET_STATE,
                 payload: {
-                    ...resp.data.find((d) => String(d.id) === todoId)
+                    ...targetTodo
                 }
             });
             // setStartDate(targetTodo.dueDate);
@@ -88,12 +92,11 @@ const UpdateTodo = () => {
         enabled: true
     });
 
-    const { mutateAsync: updateTodo, ...updateTodoInfo } = useMutation(handleUpdateTodo, {
-        refetchOnWindowFocus: false
-    });
+    const { mutateAsync: updateTodo, isLoading: isUpdateLoading } = useMutation(handleUpdateTodo, {});
+
+    const { mutateAsync: deleteTodo, isLoading: isDeleteLoading } = useMutation(handleDeleteTodo, {});
 
     const handleDateOnChange = (date) => {
-        console.log('\n', '\n', `date = `, date, '\n', '\n');
         dispatch({
             type: actions.FIELD,
             fieldName: 'dueDate',
@@ -102,8 +105,6 @@ const UpdateTodo = () => {
     };
     const handleOnChange = (e) => {
         e.preventDefault();
-        console.log('\n', '\n', `e.target.id = `, e.target.id, '\n', '\n');
-        console.log('\n', '\n', `e.target.value = `, e.target.value, '\n', '\n');
 
         dispatch({
             type: actions.FIELD,
@@ -111,41 +112,52 @@ const UpdateTodo = () => {
             payload: e.target.value
         });
     };
+
     const handleAction = async (e) => {
         e.preventDefault();
         const action = e.target.getAttribute('button-case');
 
-        if (action === 'save') {
-            let updateTodoResp = null;
-            try {
-                const updateTodoPayload = {
-                    ...state,
-                    title: state.title,
-                    description: state.description,
-                    dueDate: state.dueDate,
-                    notes: state.notes
-                };
-                console.log('\n', '\n', `updateTodoPayload = `, updateTodoPayload, '\n', '\n');
-                updateTodoResp = await updateTodo(updateTodoPayload);
-                // console.log('\n', '\n', `secondary updateTodoResp = `, updateTodoResp, '\n', '\n');
-                // router.push('/');
-            } catch (error) {
-                // console.log('\n', '\n', `updateTodo error = `, error, '\n', '\n');
-            }
+        if (action === 'delete') {
         }
-
-        if (action === 'cancel') {
-            router.push('/');
-        }
-
-        if (action === 'edit') {
-            setMode((m) => (m === 'detail' ? 'edit' : 'detail'));
+        switch (action) {
+            case 'cancel':
+                router.push('/');
+                break;
+            case 'edit':
+                setMode((m) => (m === 'detail' ? 'edit' : 'detail'));
+                break;
+            case 'delete':
+                setMode('delete');
+                break;
+            case 'cancel-delete':
+                setMode('detail');
+                break;
+            case 'save':
+                try {
+                    const updateTodoPayload = {
+                        ...state,
+                        title: state.title,
+                        description: state.description,
+                        dueDate: state.dueDate,
+                        notes: state.notes
+                    };
+                    await updateTodo(updateTodoPayload);
+                } catch (error) {}
+                break;
+            case 'confirm-delete':
+                try {
+                    const deleteTodoPayload = {
+                        id: state.id
+                    };
+                    await deleteTodo(deleteTodoPayload);
+                    router.push('/');
+                } catch (error) {}
+                break;
+            default:
+            // code block
         }
     };
-    // console.log('\n', '\n', `todoQuery = `, todosQuery, '\n', '\n');
-    console.log('\n', '\n', `state = `, state, '\n', '\n');
-    console.log('\n', '\n', `startDate = `, startDate, '\n', '\n');
-    console.log('\n', '\n', `new Date(state.dueDate) = `, new Date(state.dueDate), '\n', '\n');
+
     return (
         <Layout>
             <div className="flex items-center justify-center p-5 text-black">
@@ -199,43 +211,114 @@ const UpdateTodo = () => {
                                 <div className="col-span-8">{state.notes}</div>
                             </div>
 
-                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6 text-sm sm:text-base pr-2 sm:pr-0">
-                                <div className="col-span-5">
-                                    <button
-                                        id="cancel"
-                                        button-case="cancel"
-                                        onClick={handleAction}
-                                        className="rounded-full py-1 sm:py-2 md:py-3 px-6 text-red-600 bg-white"
-                                    >
-                                        Delete
-                                    </button>
+                            {
+                                <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6 text-sm sm:text-base pr-2 sm:pr-0">
+                                    <div className="col-span-5">
+                                        <button
+                                            id="delete"
+                                            button-case="delete"
+                                            onClick={handleAction}
+                                            className="rounded-full py-1 sm:py-2 md:py-3 px-6 text-red-600 bg-white"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                    <div className="col-span-4">
+                                        <button
+                                            id="cancel"
+                                            button-case="cancel"
+                                            onClick={handleAction}
+                                            className="rounded-full py-1 sm:py-2 md:py-3 text-blue-400 bg-white"
+                                        >
+                                            Back to list
+                                        </button>
+                                    </div>
+                                    <div className="col-span-3 items-center">
+                                        <button
+                                            id="save"
+                                            button-case="edit"
+                                            onClick={handleAction}
+                                            className="rounded-full py-1 sm:py-2 md:py-3 px-10 text-white bg-blue-400"
+                                        >
+                                            Edit
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="col-span-4">
-                                    <button
-                                        id="cancel"
-                                        button-case="cancel"
-                                        onClick={handleAction}
-                                        className="rounded-full py-1 sm:py-2 md:py-3 text-blue-400 bg-white"
-                                    >
-                                        Back to list
-                                    </button>
-                                </div>
-                                <div className="col-span-3 items-center">
-                                    <button
-                                        id="save"
-                                        button-case="edit"
-                                        onClick={handleAction}
-                                        className="rounded-full py-1 sm:py-2 md:py-3 px-10 text-white bg-blue-400"
-                                    >
-                                        Edit
-                                    </button>
-                                </div>
-                            </div>
+                            }
                             <div className="flex justify-center items-center mt-6"></div>
                         </>
                     )}
 
-                    {/* Edit Mode View */}
+                    {mode === 'delete' && (
+                        <>
+                            <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">
+                                Delete To Do
+                            </div>
+                            <div className="mt-4 w-4/12 mb-4">
+                                <select
+                                    id="taskStatus"
+                                    name="taskStatus"
+                                    value={state.taskStatus}
+                                    onChange={handleOnChange}
+                                    disabled={true}
+                                    className={cn('rounded-full py-1 px-2 text-xs w-4/12', {
+                                        'border-blue-400 text-blue-400': state.taskStatus === 'InProgress',
+                                        'border-gray-400 text-gray-400': state.taskStatus === 'ToDo',
+                                        'bg-green-500 text-white': state.taskStatus === 'Done'
+                                    })}
+                                >
+                                    <option value="ToDo">To Do</option>
+                                    <option value="InProgress">In Progress</option>
+                                    <option value="Done">Done</option>
+                                </select>
+                            </div>
+
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                                <div className="col-span-4">
+                                    <p className="font-bold">Title</p>
+                                </div>
+                                <div className="col-span-8">{state.title}</div>
+                            </div>
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                                <div className="col-span-4">
+                                    <p className="font-bold">Description</p>
+                                </div>
+                                <div className="col-span-8">{state.description}</div>
+                            </div>
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                                <div className="col-span-4">Due Date</div>
+                                <div className="col-span-8">
+                                    {state.dueDate && format(new Date(state.dueDate), 'MM/dd/yy')}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-6">
+                                <div className="col-span-4">Notes</div>
+                                <div className="col-span-8">{state.notes}</div>
+                            </div>
+
+                            <div className="w-full sm:w-10/12 md:w-8/12 lg:w-6/12 flex justify-end">
+                                <button
+                                    id="cancel-delete"
+                                    button-case="cancel-delete"
+                                    onClick={handleAction}
+                                    className="rounded-full mr-8 py-1 sm:py-2 md:py-3 px-6 text-blue-400 bg-white"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    id="confirm-delete"
+                                    button-case="confirm-delete"
+                                    onClick={handleAction}
+                                    className="rounded-full py-1 sm:py-2 md:py-3 px-10 text-white bg-red-500"
+                                >
+                                    Delete
+                                    {isDeleteLoading && <span className="spin-circle-small" />}
+                                </button>
+                            </div>
+                        </>
+                    )}
+
+                    {/* Delete Mode View */}
                     {mode === 'edit' && (
                         <form>
                             <div className="w-full sm:w-10/12 md:w-8/12 lg:w-6/12">
@@ -348,6 +431,7 @@ const UpdateTodo = () => {
                                         className="rounded-full py-1 sm:py-2 md:py-3 px-10 text-white bg-blue-400"
                                     >
                                         Save
+                                        {isUpdateLoading && <span className="spin-circle-small" />}
                                     </button>
                                 </div>
                             </div>

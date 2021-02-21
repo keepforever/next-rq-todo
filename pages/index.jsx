@@ -1,9 +1,10 @@
+/* eslint-disable no-empty */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
-import { format, compareAsc } from 'date-fns';
+import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -47,9 +48,9 @@ const TodoItem = (props) => {
             {/* Title, Description */}
 
             <div
-                className="col-span-8 pl-4"
+                className="col-span-7 pl-4"
                 onClick={() => {
-                    router.push(`/edit/${props.id}`);
+                    router.push(`/detail/${props.id}`);
                 }}
             >
                 <span className="font-bold mr-2">{props.id}</span>
@@ -60,9 +61,9 @@ const TodoItem = (props) => {
             {/* Status Indicator */}
 
             <div
-                className="col-span-2 flex justify-center items-center"
+                className="col-span-3 flex justify-center items-center"
                 onClick={() => {
-                    router.push(`/edit/${props.id}`);
+                    router.push(`/detail/${props.id}`);
                 }}
             >
                 <span
@@ -83,14 +84,16 @@ const TodoItem = (props) => {
 };
 
 const index = () => {
-    const todosQuery = useQuery('todos', getTodos, { refetchOnWindowFocus: false });
-    // console.log('\n', '\n', `todosQuery = `, todosQuery, '\n', '\n');
+    const { data, isLoading } = useQuery('todos', getTodos, { refetchOnWindowFocus: false });
 
     return (
         <Layout>
             <div className="flex items-center justify-center p-5 text-black">
-                <div className="container">
-                    <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">To Dos</div>
+                <div className="container ">
+                    <div className="flex justify-start items-center mb-4 text-xl font-bold text-black">
+                        To Dos
+                        {isLoading && <span className="spin-circle-small" />}
+                    </div>
 
                     <Link href="/create-todo">
                         <a className="table">
@@ -107,14 +110,8 @@ const index = () => {
                     </Link>
                     <div className="flex justify-center items-center content-center w-full mt-3">
                         <div className="flex-col justify-center items-center content-center w-full shadow-lg px-4">
-                            {todosQuery?.data?.data.map((td, index) => {
-                                return (
-                                    <TodoItem
-                                        {...td}
-                                        key={td.id}
-                                        isLastTodo={todosQuery?.data?.data.length - 1 !== index}
-                                    />
-                                );
+                            {data?.data.map((td, index) => {
+                                return <TodoItem {...td} key={td.id} isLastTodo={data?.data.length - 1 !== index} />;
                             })}
                         </div>
                     </div>
