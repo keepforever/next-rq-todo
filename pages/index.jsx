@@ -48,9 +48,9 @@ const TodoItem = (props) => {
             })}
         >
             {/* Action Button */}
-            <div className="col-span-4 sm:col-span-2 border-r-2 border-gray-200 flex justify-center px-0 sm:px-2">
+            <div className="col-span-5 sm:col-span-3 md:col-span-2 border-r-2 border-gray-200 flex justify-center">
                 <select
-                    className={cn('rounded-full py-1 px-2 text-xs w-10/12', {
+                    className={cn('rounded-full py-1 px-4 text-xs w-10/12', {
                         'border-blue-400 text-blue-400': props.taskStatus === 'InProgress',
                         'border-gray-400 text-gray-400': props.taskStatus === 'ToDo',
                         'bg-green-500 text-white': props.taskStatus === 'Done'
@@ -68,7 +68,7 @@ const TodoItem = (props) => {
 
             {/* Title, Description */}
             <div
-                className="col-span-6 sm:col-span-7 pl-4 max-h-6 truncate"
+                className="col-span-5 sm:col-span-6 md:col-span-7 pl-4 max-h-6 truncate"
                 onClick={() => {
                     router.push(`/detail/${props.id}`);
                 }}
