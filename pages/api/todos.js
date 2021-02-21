@@ -40,6 +40,26 @@ const getTodos = async (req, res) => {
             }
             // code block
         }
+        case 'PUT': {
+            let updateTodoResp = null;
+            console.log('\n', '\n', `req.body = `, req.body, '\n', '\n');
+            try {
+                updateTodoResp = await axios.put(
+                    `https://awh-task-manager-api-app.azurewebsites.net/api/User/${process?.env?.BRIAN_KEY}/ToDos/${req.body.id}`,
+                    {
+                        ...req.body,
+                        userId: process?.env?.BRIAN_KEY
+                    }
+                );
+                console.log('\n', '\n', `updateTodoResp = `, updateTodoResp.config.data, '\n', '\n');
+                return res.status(201).json(updateTodoResp?.config?.data);
+            } catch (error) {
+                console.log('\n', `hello api/todo error ${String(new Date().getTime())}`, '\n');
+                console.log('\n', '\n', `error.response = `, error.response, '\n', '\n');
+                return res.status(500).json(error);
+            }
+            // code block
+        }
         default: {
             return res.status(501);
         }

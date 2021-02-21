@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import cn from 'classnames';
 import { format, compareAsc } from 'date-fns';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import Layout from '../comps/Layout';
 
@@ -17,9 +18,14 @@ const getTodos = async () => {
 };
 
 const TodoItem = (props) => {
+    const router = useRouter();
+
     return (
         <div
-            className={cn('grid grid-cols-12 p-2', {
+            onClick={() => {
+                router.push(`/edit/${props.id}`);
+            }}
+            className={cn('grid grid-cols-12 p-2 cursor-pointer hover:bg-green-200', {
                 'border-red-400 border-b-2': props.isLastTodo
             })}
         >
