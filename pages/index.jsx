@@ -7,6 +7,7 @@ import cn from 'classnames';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { ensureEven100 } from '../utils';
 
 import Layout from '../comps/Layout';
 
@@ -106,6 +107,70 @@ const TodoItem = (props) => {
     );
 };
 
+const ProgressSummaryBar = ({ todos = [] }) => {
+    const { red, yellow, green, total } = todos.reduce(
+        (accumulator, t) => {
+            if (new Date(t.dueDate).getTime() - new Date().getTime() < 0) {
+                accumulator.red.push(t);
+            }
+            if (
+                new Date(t.dueDate).getTime() - new Date().getTime() < 60 * 60 * 24 * 1000 * 2 &&
+                new Date(t.dueDate).getTime() - new Date().getTime() > 0
+            ) {
+                accumulator.yellow.push(t);
+            }
+            if (new Date(t.dueDate).getTime() - new Date().getTime() > 60 * 60 * 24 * 1000 * 2) {
+                accumulator.green.push(t);
+            }
+
+            return accumulator;
+        },
+        {
+            red: [],
+            yellow: [],
+            green: [],
+            total: todos?.length || 0
+        }
+    );
+
+    if (!total) return null;
+
+    const [redRounded, yellowRounded, greenRounded] = ensureEven100(
+        [
+            parseInt((red.length / total) * 100),
+            parseInt((yellow.length / total) * 100),
+            parseInt((green.length / total) * 100)
+        ],
+        100
+    );
+
+    return (
+        <div className="w-full flex rounded-xl overflow-y-hidden mb-2">
+            <span
+                className="bg-red-500"
+                style={{
+                    width: `${redRounded}%`,
+                    minHeight: '12px'
+                }}
+            />
+            <span
+                className="bg-yellow-500"
+                style={{
+                    width: `${yellowRounded}%`,
+                    minHeight: '12px'
+                }}
+            />
+            <span
+                className="bg-green-500"
+                style={{
+                    width: `${greenRounded}%`,
+                    minHeight: '12px'
+                }}
+            />
+        </div>
+    );
+};
+
 const index = () => {
     const { data, isLoading } = useQuery('todos', getTodos, { refetchOnWindowFocus: false });
 
@@ -113,13 +178,13 @@ const index = () => {
         <Layout>
             <div className="flex items-center justify-center text-black">
                 <div className="container ">
-                    <div className="flex justify-start items-center mb-4 text-xl font-bold text-black px-5">
+                    <div className="flex justify-start items-center mb-4 text-xl font-bold text-black pl-4 sm:pl-0">
                         To Dos
                         {isLoading && <span className="spin-circle-small" />}
                     </div>
 
                     <Link href="/create-todo">
-                        <a className="table px-5">
+                        <a className="table pl-4 sm:pl-0 mb-4">
                             <div className="flex items-center">
                                 <img
                                     className="h-5 md:h-5 mr-3"
@@ -131,6 +196,9 @@ const index = () => {
                             </div>
                         </a>
                     </Link>
+
+                    <ProgressSummaryBar todos={data?.data || []} />
+
                     <div className="flex justify-center items-center content-center w-full mt-3 mb-4">
                         <div className="flex-col justify-center items-center content-center w-full shadow-lg pr-2">
                             {data?.data.map((td, index) => {
