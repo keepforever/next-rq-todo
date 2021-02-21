@@ -22,7 +22,7 @@ const TodoItem = (props) => {
 
     return (
         <div
-            className={cn('grid grid-cols-12 p-2 cursor-pointer hover:bg-green-200', {
+            className={cn('grid grid-cols-12 p-2 cursor-pointer hover:bg-gray-100', {
                 'border-gray-200 border-b-2': props.isLastTodo
             })}
         >
