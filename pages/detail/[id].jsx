@@ -254,7 +254,7 @@ const UpdateTodo = () => {
                             <div className="flex justify-start items-center mb-4 text-xl font-bold text-black pl-4 sm:pl-0">
                                 Delete To Do
                             </div>
-                            <div className="mt-4 w-4/12 mb-4">
+                            <div className="mt-4 mb-4">
                                 <select
                                     id="taskStatus"
                                     name="taskStatus"
