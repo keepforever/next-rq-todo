@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  postgresql:
+    image: postgres:11
+    restart: always
+    expose:
+      - '5432'
+    container_name: pg-docker
+    ports:
+      - '5400:5432'
+    environment:
+      - POSTGRES_DB=prisma
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - './db/data:/var/lib/postgresql/data'
+      - './db/init:/docker-entrypoint-initdb.d'
