@@ -17,9 +17,11 @@
     },
     "cSpell.words": [
         "Todos",
+        "datasource",
         "datepicker",
         "keepforever",
-        "tailwindcss"
+        "tailwindcss",
+        "todoprisma"
     ],
     "peacock.color": "#1a131a"
 }

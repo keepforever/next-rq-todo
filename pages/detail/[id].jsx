@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-empty */
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
@@ -5,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useMutation, useQuery } from 'react-query';
 import cn from 'classnames';
 import { format } from 'date-fns';
+import { PrismaClient } from '@prisma/client';
 
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
@@ -48,10 +50,10 @@ const reducer = (state = {}, action = null) => {
             return state;
     }
 };
-const getTodos = async () => {
+const getTodo = async ({ queryKey }) => {
     let getTodosResp = null;
     try {
-        getTodosResp = await axios.get('/api/todos');
+        getTodosResp = await axios.get(`/api/todos/${queryKey[1]}`);
     } catch (error) {}
     return getTodosResp;
 };
@@ -70,26 +72,32 @@ const handleDeleteTodo = async (data) => {
     return deleteTodoResp;
 };
 
-const UpdateTodo = () => {
-    const [state, dispatch] = React.useReducer(reducer, initialState);
+const UpdateTodo = (props) => {
+    const [state, dispatch] = React.useReducer(reducer, () => {
+        return {
+            ...initialState,
+            ...props.todo
+        };
+    });
     const [mode, setMode] = React.useState('detail');
     const router = useRouter();
     const { id: todoId } = router.query;
 
-    useQuery('todos', getTodos, {
-        onSuccess: (resp) => {
-            const targetTodo = resp.data.find((d) => String(d.id) === todoId);
+    console.log('\n', '\n', `props = `, props, '\n', '\n');
 
+    useQuery(['todos', todoId], getTodo, {
+        initialData: props.todo,
+        onSuccess: ({ data: todo }) => {
+            console.log('\n', '\n', `onSuccess todo = `, todo, '\n', '\n');
             dispatch({
                 type: actions.SET_STATE,
                 payload: {
-                    ...targetTodo
+                    ...todo
                 }
             });
-            // setStartDate(targetTodo.dueDate);
         },
         refetchOnWindowFocus: false,
-        enabled: true
+        enabled: !!todoId
     });
 
     const { mutateAsync: updateTodo, isLoading: isUpdateLoading } = useMutation(handleUpdateTodo, {});
@@ -135,11 +143,11 @@ const UpdateTodo = () => {
             case 'save':
                 try {
                     const updateTodoPayload = {
-                        ...state,
                         title: state.title,
                         description: state.description,
                         dueDate: state.dueDate,
-                        notes: state.notes
+                        notes: state.notes,
+                        taskStatus: state.taskStatus
                     };
                     await updateTodo(updateTodoPayload);
                     setMode('detail');
@@ -441,6 +449,12 @@ const UpdateTodo = () => {
             </div>
         </Layout>
     );
+};
+
+UpdateTodo.getInitialProps = async ({ query }) => {
+    const prisma = new PrismaClient();
+    const todo = await prisma.todo.findUnique({ where: { id: parseFloat(query.id) } });
+    return { todo };
 };
 
 export default UpdateTodo;
