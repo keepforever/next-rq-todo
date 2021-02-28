@@ -5,20 +5,15 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const getTodos = async (req, res) => {
+    console.log('\n', `hello api/todos/index.js `, '\n');
     const switcher = req.method;
-
-    const {
-        query: { id }
-    } = req;
-
-    console.log('\n', '\n', `index id = `, id, '\n', '\n');
 
     switch (switcher) {
         case 'GET': {
             let todos = null;
             try {
                 todos = await prisma.todo.findMany();
-                console.log('\n', '\n', `todos/index.js GET = `, todos, '\n', '\n');
+                // console.log('\n', '\n', `todos/index.js GET = `, todos, '\n', '\n');
             } catch (error) {}
             return res.status(200).json(todos);
         }
@@ -32,9 +27,7 @@ const getTodos = async (req, res) => {
                 const newTodo = await prisma.todo.create({
                     data: createTodoPayload
                 });
-
-                console.log('\n', '\n', `create todo resp = `, newTodo, '\n', '\n');
-
+                // console.log('\n', '\n', `create todo resp = `, newTodo, '\n', '\n');
                 return res.status(201).json(newTodo);
             } catch (error) {
                 console.log('\n', '\n', `create todo error = `, error, '\n', '\n');
@@ -46,9 +39,12 @@ const getTodos = async (req, res) => {
             let updatedTodo = null;
 
             try {
-                updatedTodo = await prisma.todo.update({ where: { id: req.body.id }, data: {
-
-                } });
+                updatedTodo = await prisma.todo.update({
+                    where: { id: req.body.id },
+                    data: {
+                        taskStatus: req.body.taskStatus
+                    }
+                });
 
                 return res.status(201).json(updatedTodo);
             } catch (error) {
