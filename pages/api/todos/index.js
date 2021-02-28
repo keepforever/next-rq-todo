@@ -18,39 +18,39 @@ const getTodos = async (req, res) => {
             let todos = null;
             try {
                 todos = await prisma.todo.findMany();
-                console.log('\n', '\n', `INdex todos = `, todos, '\n', '\n');
+                console.log('\n', '\n', `todos/index.js GET = `, todos, '\n', '\n');
             } catch (error) {}
             return res.status(200).json(todos);
         }
         case 'POST': {
+            const createTodoPayload = {
+                ...req.body,
+                taskStatus: 'TODO'
+            };
+            console.log('\n', '\n', `createTodoPayload = `, createTodoPayload, '\n', '\n');
             try {
-                const todo = await prisma.todo.create({
-                    data: {
-                        ...req.body,
-                        userId: process?.env?.BRIAN_KEY,
-                        taskStatus: 'ToDo'
-                    }
+                const newTodo = await prisma.todo.create({
+                    data: createTodoPayload
                 });
 
-                return res.status(201).json(todo);
+                console.log('\n', '\n', `create todo resp = `, newTodo, '\n', '\n');
+
+                return res.status(201).json(newTodo);
             } catch (error) {
+                console.log('\n', '\n', `create todo error = `, error, '\n', '\n');
                 return res.status(500).json(error);
             }
             // code block
         }
         case 'PUT': {
-            let updateTodoResp = null;
+            let updatedTodo = null;
 
             try {
-                updateTodoResp = await axios.put(
-                    `https://awh-task-manager-api-app.azurewebsites.net/api/User/${process?.env?.BRIAN_KEY}/ToDos/${req.body.id}`,
-                    {
-                        ...req.body,
-                        userId: process?.env?.BRIAN_KEY
-                    }
-                );
+                updatedTodo = await prisma.todo.update({ where: { id: req.body.id }, data: {
 
-                return res.status(201).json(updateTodoResp?.config?.data);
+                } });
+
+                return res.status(201).json(updatedTodo);
             } catch (error) {
                 return res.status(500).json(error);
             }

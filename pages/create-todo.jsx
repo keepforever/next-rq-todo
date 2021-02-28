@@ -86,7 +86,8 @@ const CreateTodo = () => {
                     title: state.title,
                     description: state.description,
                     dueDate: startDate.toISOString(),
-                    notes: state.notes
+                    notes: state.notes,
+                    userId: 1
                 });
                 router.push('/');
             } catch (error) {}

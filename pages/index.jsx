@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ensureEven100 } from '../utils';
+import { PrismaClient } from '@prisma/client';
 
 import Layout from '../comps/Layout';
 
@@ -16,7 +17,7 @@ const getTodos = async () => {
     try {
         getTodosResp = await axios.get('/api/todos');
     } catch (error) {}
-    return getTodosResp;
+    return getTodosResp?.data || [];
 };
 
 const handleUpdateTodo = async (data) => {
@@ -35,7 +36,7 @@ const TodoItem = (props) => {
     const onUpdateTaskStatus = async (e) => {
         try {
             const updateTodoPayload = {
-                ...props,
+                id: props.id,
                 taskStatus: e.target.value
             };
             await updateTodo(updateTodoPayload);
@@ -52,18 +53,18 @@ const TodoItem = (props) => {
             <div className="col-span-5 sm:col-span-3 md:col-span-2 border-r-2 border-gray-200 flex justify-center">
                 <select
                     className={cn('rounded-full py-1 px-4 text-xs w-10/12', {
-                        'border-blue-400 text-blue-400': props.taskStatus === 'InProgress',
-                        'border-gray-400 text-gray-400': props.taskStatus === 'ToDo',
-                        'bg-green-500 text-white': props.taskStatus === 'Done'
+                        'border-blue-400 text-blue-400': props.taskStatus === 'IN_PROGRESS',
+                        'border-gray-400 text-gray-400': props.taskStatus === 'TODO',
+                        'bg-green-500 text-white': props.taskStatus === 'DONE'
                     })}
                     onChange={onUpdateTaskStatus}
                     name="taskStatus"
                     id="taskStatus"
                     value={props.taskStatus}
                 >
-                    <option value="ToDo">To Do</option>
-                    <option value="InProgress">In Progress</option>
-                    <option value="Done">Done</option>
+                    <option value="TODO">To Do</option>
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="DONE">Done</option>
                 </select>
             </div>
 
@@ -171,8 +172,12 @@ const ProgressSummaryBar = ({ todos = [] }) => {
     );
 };
 
-const index = () => {
-    const { data, isLoading } = useQuery('todos', getTodos, { refetchOnWindowFocus: false });
+const index = (props) => {
+    const { data, isLoading } = useQuery('todos', getTodos, { refetchOnWindowFocus: false, initialData: props.todos });
+    console.group(`index.jsx`);
+    console.log('\n', '\n', `props = `, props, '\n', '\n');
+    console.log('\n', '\n', `data = `, data, '\n', '\n');
+    console.groupEnd();
 
     return (
         <Layout>
@@ -197,12 +202,12 @@ const index = () => {
                         </a>
                     </Link>
 
-                    <ProgressSummaryBar todos={data?.data || []} />
+                    <ProgressSummaryBar todos={data || []} />
 
                     <div className="flex justify-center items-center content-center w-full mt-3 mb-4">
                         <div className="flex-col justify-center items-center content-center w-full shadow-lg pr-2">
-                            {data?.data.map((td, index) => {
-                                return <TodoItem {...td} key={td.id} isLastTodo={data?.data.length - 1 !== index} />;
+                            {data.map((td, index) => {
+                                return <TodoItem {...td} key={td.id} isLastTodo={data.length - 1 !== index} />;
                             })}
                         </div>
                     </div>
@@ -210,6 +215,23 @@ const index = () => {
             </div>
         </Layout>
     );
+};
+
+export const getServerSideProps = async () => {
+    const prisma = new PrismaClient();
+    const todos = await prisma.todo.findMany();
+    return {
+        props: {
+            todos: todos.map((t) => {
+                return {
+                    ...t,
+                    dueDate: new Date(t.dueDate).toJSON(),
+                    createdAt: new Date(t.createdAt).toJSON(),
+                    updatedAt: new Date(t.updatedAt).toJSON()
+                };
+            })
+        }
+    };
 };
 
 export default index;

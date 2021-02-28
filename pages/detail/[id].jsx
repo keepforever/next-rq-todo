@@ -451,10 +451,19 @@ const UpdateTodo = (props) => {
     );
 };
 
-UpdateTodo.getInitialProps = async ({ query }) => {
+export const getServerSideProps = async ({ query: { id } }) => {
     const prisma = new PrismaClient();
-    const todo = await prisma.todo.findUnique({ where: { id: parseFloat(query.id) } });
-    return { todo };
+    const todo = await prisma.todo.findUnique({ where: { id: parseFloat(id) } });
+    return {
+        props: {
+            todo: {
+                ...todo,
+                dueDate: new Date(todo.dueDate).toJSON(),
+                createdAt: new Date(todo.createdAt).toJSON(),
+                updatedAt: new Date(todo.updatedAt).toJSON()
+            }
+        }
+    };
 };
 
 export default UpdateTodo;
