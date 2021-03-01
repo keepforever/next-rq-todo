@@ -25,15 +25,13 @@ const getTodos = async (req, res) => {
         query: { id }
     } = req;
 
-    console.log('\n', '\n', `[id] id = `, id, '\n', '\n');
-
     switch (switcher) {
         case 'GET': {
-            console.log('\n', `hello get `, '\n');
+            console.log('\n', `hello todos/[id].js get `, '\n');
             let todo = null;
             try {
                 todo = await prisma.todo.findUnique({ where: { id: parseInt(id) } });
-                console.log('\n', '\n', `[id] todo = `, todo, '\n', '\n');
+                // console.log('\n', '\n', `[id] todo = `, todo, '\n', '\n');
             } catch (error) {}
             return res.status(200).json(todo);
         }
@@ -43,7 +41,7 @@ const getTodos = async (req, res) => {
                 userId: process?.env?.BRIAN_KEY,
                 taskStatus: 'ToDo'
             };
-            console.log('\n', '\n', `createTodoPayload = `, createTodoPayload, '\n', '\n');
+            // console.log('\n', '\n', `createTodoPayload = `, createTodoPayload, '\n', '\n');
             try {
                 const todo = await prisma.todo.create({
                     data: createTodoPayload
@@ -62,7 +60,7 @@ const getTodos = async (req, res) => {
                 userId: process?.env?.BRIAN_KEY,
                 taskStatus: 'ToDo'
             };
-            console.log('\n', '\n', `updateTodoPayload = `, updateTodoPayload, '\n', '\n');
+            // console.log('\n', '\n', `updateTodoPayload = `, updateTodoPayload, '\n', '\n');
             try {
                 const todo = await prisma.todo.update({
                     where: { id: parseInt(id) },

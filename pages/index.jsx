@@ -174,11 +174,10 @@ const ProgressSummaryBar = ({ todos = [] }) => {
 
 const index = (props) => {
     const { data, isLoading } = useQuery('todos', getTodos, { refetchOnWindowFocus: false, initialData: props.todos });
-    console.group(`index.jsx`);
-    console.log('\n', '\n', `props = `, props, '\n', '\n');
-    console.log('\n', '\n', `data = `, data, '\n', '\n');
-    console.groupEnd();
-
+    // console.group(`index.jsx`);
+    // console.log('\n', '\n', `props = `, props, '\n', '\n');
+    // console.log('\n', '\n', `data = `, data, '\n', '\n');
+    // console.groupEnd();
     return (
         <Layout>
             <div className="flex items-center justify-center text-black">
@@ -206,9 +205,11 @@ const index = (props) => {
 
                     <div className="flex justify-center items-center content-center w-full mt-3 mb-4">
                         <div className="flex-col justify-center items-center content-center w-full shadow-lg pr-2">
-                            {data.map((td, index) => {
-                                return <TodoItem {...td} key={td.id} isLastTodo={data.length - 1 !== index} />;
-                            })}
+                            {data
+                                .sort((a, b) => a.id - b.id)
+                                .map((td, index) => {
+                                    return <TodoItem {...td} key={td.id} isLastTodo={data.length - 1 !== index} />;
+                                })}
                         </div>
                     </div>
                 </div>

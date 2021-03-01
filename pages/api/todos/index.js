@@ -22,7 +22,7 @@ const getTodos = async (req, res) => {
                 ...req.body,
                 taskStatus: 'TODO'
             };
-            console.log('\n', '\n', `createTodoPayload = `, createTodoPayload, '\n', '\n');
+            // console.log('\n', '\n', `createTodoPayload = `, createTodoPayload, '\n', '\n');
             try {
                 const newTodo = await prisma.todo.create({
                     data: createTodoPayload
@@ -37,17 +37,23 @@ const getTodos = async (req, res) => {
         }
         case 'PUT': {
             let updatedTodo = null;
+            console.log('\n', `hello put `, '\n');
+            const updateTodoPayload = {
+                ...req.body
+            };
+            // console.log('\n', '\n', `updateTodoPayload = `, updateTodoPayload, '\n', '\n');
+
+            delete updateTodoPayload.id;
 
             try {
                 updatedTodo = await prisma.todo.update({
-                    where: { id: req.body.id },
-                    data: {
-                        taskStatus: req.body.taskStatus
-                    }
+                    where: { id: parseInt(req.body.id) },
+                    data: updateTodoPayload
                 });
 
                 return res.status(201).json(updatedTodo);
             } catch (error) {
+                console.log('\n', '\n', `error = `, error, '\n', '\n');
                 return res.status(500).json(error);
             }
             // code block

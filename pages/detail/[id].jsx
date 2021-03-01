@@ -83,7 +83,7 @@ const UpdateTodo = (props) => {
     const router = useRouter();
     const { id: todoId } = router.query;
 
-    console.log('\n', '\n', `props = `, props, '\n', '\n');
+    // console.log('\n', '\n', `props = `, props, '\n', '\n');
 
     useQuery(['todos', todoId], getTodo, {
         initialData: props.todo,
@@ -143,6 +143,7 @@ const UpdateTodo = (props) => {
             case 'save':
                 try {
                     const updateTodoPayload = {
+                        id: todoId,
                         title: state.title,
                         description: state.description,
                         dueDate: state.dueDate,
@@ -191,9 +192,9 @@ const UpdateTodo = (props) => {
                                         'bg-green-500 text-white': state.taskStatus === 'Done'
                                     })}
                                 >
-                                    <option value="ToDo">To Do</option>
-                                    <option value="InProgress">In Progress</option>
-                                    <option value="Done">Done</option>
+                                    <option value="TODO">To Do</option>
+                                    <option value="IN_PROGRESS">In Progress</option>
+                                    <option value="DONE">Done</option>
                                 </select>
                             </div>
 
@@ -275,9 +276,9 @@ const UpdateTodo = (props) => {
                                         'bg-green-500 text-white': state.taskStatus === 'Done'
                                     })}
                                 >
-                                    <option value="ToDo">To Do</option>
-                                    <option value="InProgress">In Progress</option>
-                                    <option value="Done">Done</option>
+                                    <option value="TODO">To Do</option>
+                                    <option value="IN_PROGRESS">In Progress</option>
+                                    <option value="DONE">Done</option>
                                 </select>
                             </div>
 
@@ -345,9 +346,9 @@ const UpdateTodo = (props) => {
                                             'bg-green-500 text-white': state.taskStatus === 'Done'
                                         })}
                                     >
-                                        <option value="ToDo">To Do</option>
-                                        <option value="InProgress">In Progress</option>
-                                        <option value="Done">Done</option>
+                                        <option value="TODO">To Do</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
+                                        <option value="DONE">Done</option>
                                     </select>
                                 </div>
 
