@@ -199,30 +199,30 @@ const UpdateTodo = (props) => {
                             </div>
 
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
-                                <div className="col-span-4">
+                                <div className="col-span-4 flex justify-center">
                                     <p className="font-bold">Title</p>
                                 </div>
                                 <div className="col-span-8">{state.title}</div>
                             </div>
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
-                                <div className="col-span-4">
+                                <div className="col-span-4 flex justify-center">
                                     <p className="font-bold">Description</p>
                                 </div>
                                 <div className="col-span-8">{state.description}</div>
                             </div>
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
-                                <div className="col-span-4">Due Date</div>
+                                <div className="col-span-4 flex justify-center">Due Date</div>
                                 <div className="col-span-8">
                                     {state.dueDate && format(new Date(state.dueDate), 'MM/dd/yy')}
                                 </div>
                             </div>
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
-                                <div className="col-span-4">Notes</div>
+                                <div className="col-span-4 flex justify-center">Notes</div>
                                 <div className="col-span-8">{state.notes}</div>
                             </div>
 
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4 text-sm sm:text-base pr-2 sm:pr-0">
-                                <div className="col-span-4">
+                                <div className="col-span-4 flex justify-center">
                                     <button
                                         id="delete"
                                         button-case="delete"
@@ -232,7 +232,7 @@ const UpdateTodo = (props) => {
                                         Delete
                                     </button>
                                 </div>
-                                <div className="col-span-4">
+                                <div className="col-span-4 flex justify-center">
                                     <button
                                         id="cancel"
                                         button-case="cancel"
@@ -242,7 +242,8 @@ const UpdateTodo = (props) => {
                                         Back to list
                                     </button>
                                 </div>
-                                <div className="col-span-4 items-center">
+                                {/* TODO: col-span-4 can be combined with display: flex to center/align content */}
+                                <div className="col-span-4 flex justify-center">
                                     <button
                                         id="save"
                                         button-case="edit"
@@ -283,25 +284,25 @@ const UpdateTodo = (props) => {
                             </div>
 
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
-                                <div className="col-span-4">
+                                <div className="col-span-4 flex justify-center">
                                     <p className="font-bold">Title</p>
                                 </div>
                                 <div className="col-span-8">{state.title}</div>
                             </div>
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
-                                <div className="col-span-4">
+                                <div className="col-span-4 flex justify-center">
                                     <p className="font-bold">Description</p>
                                 </div>
                                 <div className="col-span-8">{state.description}</div>
                             </div>
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
-                                <div className="col-span-4">Due Date</div>
+                                <div className="col-span-4 flex justify-center">Due Date</div>
                                 <div className="col-span-8">
                                     {state.dueDate && format(new Date(state.dueDate), 'MM/dd/yy')}
                                 </div>
                             </div>
                             <div className="grid grid-cols-12 w-full sm:w-10/12 md:w-8/12 lg:w-6/12 mb-4">
-                                <div className="col-span-4">Notes</div>
+                                <div className="col-span-4 flex justify-center">Notes</div>
                                 <div className="col-span-8">{state.notes}</div>
                             </div>
 
